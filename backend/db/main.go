@@ -18,7 +18,7 @@ func main() {
 	}
 
 	// BITNO: mora odgovarati strukturi foldera
-	migrationsPath := "file://db/migrations"
+	migrationsPath := "file://migrations"
 
 	m, err := migrate.New(migrationsPath, databaseURL)
 	if err != nil {
