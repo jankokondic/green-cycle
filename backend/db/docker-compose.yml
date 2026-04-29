@@ -13,6 +13,11 @@ services:
       - postgres_green_data:/var/lib/postgresql/data
     networks:
       - green_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U green_user -d green_cycle"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   migrate_green:
     build:
@@ -20,7 +25,8 @@ services:
       dockerfile: Dockerfile.migrate
     container_name: migrate_green
     depends_on:
-      - postgres_green
+      postgres_green:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgres://green_user:green_password@postgres_green:5432/green_cycle?sslmode=disable
     networks:

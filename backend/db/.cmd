@@ -1,0 +1,1 @@
+sudo docker exec -it postgres_green psql -U green_user -d green_cycle
