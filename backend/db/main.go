@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"log"
+	"os"
 
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -10,11 +11,14 @@ import (
 )
 
 func main() {
-	//connection
-	databaseURL := "postgres://green_user:green_password@localhost:5432/green_cycle?sslmode=disable"
+	// koristi ENV ako postoji (Docker), fallback na local
+	databaseURL := os.Getenv("DATABASE_URL")
+	if databaseURL == "" {
+		databaseURL = "postgres://green_user:green_password@localhost:12345/green_cycle?sslmode=disable"
+	}
 
-	//directory for migrations
-	migrationsPath := "file://migrations"
+	// BITNO: mora odgovarati strukturi foldera
+	migrationsPath := "file://db/migrations"
 
 	m, err := migrate.New(migrationsPath, databaseURL)
 	if err != nil {
