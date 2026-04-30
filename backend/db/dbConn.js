@@ -276,4 +276,69 @@ dataPool.GetProjectDetails = async (projectId) => {
     };
 };
 
+dataPool.SearchProjects = async ({
+    searchText,
+    category,
+    difficulty,
+    materialName
+}) => {
+    let query = `
+        SELECT DISTINCT p.*
+        FROM project p
+        LEFT JOIN material_project mp ON p.project_id = mp.project_id
+        LEFT JOIN material m ON mp.material_id = m.material_id
+        WHERE 1=1
+    `;
+
+    const values = [];
+    let paramIndex = 1;
+
+    if (searchText) {
+        query += ` AND (
+            p.title ILIKE $${paramIndex} OR 
+            p.description ILIKE $${paramIndex} OR 
+            p.instruction ILIKE $${paramIndex}
+        )`;
+
+        values.push(`%${searchText}%`);
+        paramIndex++;
+    }
+
+    if (category) {
+        query += ` AND p.category = $${paramIndex}`;
+        values.push(category);
+        paramIndex++;
+    }
+
+    if (difficulty) {
+        query += ` AND p.difficulty = $${paramIndex}`;
+        values.push(difficulty);
+        paramIndex++;
+    }
+
+    if (materialName) {
+        query += ` AND m.name ILIKE $${paramIndex}`;
+        values.push(`%${materialName}%`);
+        paramIndex++;
+    }
+
+    const result = await conn.query(query, values);
+    return result.rows;
+};
+
+dataPool.DeleteProject = async (projectId) => {
+    const result = await conn.query(
+        `DELETE FROM project 
+         WHERE project_id = $1 
+         RETURNING project_id`,
+        [projectId]
+    );
+
+    if (result.rows.length === 0) {
+        throw new Error("Project not found");
+    }
+
+    return { success: true };
+};
+
 module.exports = dataPool;
