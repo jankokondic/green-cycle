@@ -461,4 +461,24 @@ dataPool.SearchMaterials = async ({ name, is_ecologically, is_sensitive, unit })
     return result.rows;
 };
 
+dataPool.GetAllMaterials = async () => {
+    const query = `
+        SELECT 
+            material_id, 
+            category, 
+            description, 
+            is_ecologically, 
+            is_sensitive, 
+            unit, 
+            name, 
+            icon
+        FROM material 
+        ORDER BY material_id DESC
+    `;
+
+    const result = await conn.query(query);
+
+    return result.rows;
+};
+
 module.exports = dataPool;
