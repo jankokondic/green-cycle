@@ -428,4 +428,37 @@ dataPool.EditMaterial = async (material_id, updates) => {
     return result.rows[0];
 };
 
+dataPool.SearchMaterials = async ({ name, is_ecologically, is_sensitive, unit }) => {
+    let query = 'SELECT * FROM material WHERE 1=1';
+    const values = [];
+    let paramIndex = 1;
+
+    if (name) {
+        query += ` AND name ILIKE $${paramIndex}`;
+        values.push(`%${name}%`);
+        paramIndex++;
+    }
+
+    if (is_ecologically !== undefined) {
+        query += ` AND is_ecologically = $${paramIndex}`;
+        values.push(is_ecologically);
+        paramIndex++;
+    }
+
+    if (is_sensitive !== undefined) {
+        query += ` AND is_sensitive = $${paramIndex}`;
+        values.push(is_sensitive);
+        paramIndex++;
+    }
+
+    if (unit) {
+        query += ` AND unit = $${paramIndex}`;
+        values.push(unit);
+        paramIndex++;
+    }
+
+    const result = await conn.query(query, values);
+    return result.rows;
+};
+
 module.exports = dataPool;
