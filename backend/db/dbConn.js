@@ -341,4 +341,44 @@ dataPool.DeleteProject = async (projectId) => {
     return { success: true };
 };
 
+dataPool.AddMaterial = async (material) => {
+    const {
+        category,
+        description,
+        is_ecologically_bool,
+        is_sensitive_bool,
+        unit,
+        name,
+        file_name
+    } = material;
+
+    const query = `
+        INSERT INTO material (
+            category,
+            description,
+            is_ecologically,
+            is_sensitive,
+            unit,
+            name,
+            icon
+        )
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING *
+    `;
+
+    const values = [
+        category,
+        description,
+        is_ecologically_bool,
+        is_sensitive_bool,
+        unit,
+        name,
+        file_name
+    ];
+
+    const result = await conn.query(query, values);
+
+    return result.rows[0];
+};
+
 module.exports = dataPool;
