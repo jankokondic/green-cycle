@@ -399,4 +399,33 @@ dataPool.DeleteMaterial = async (material_id) => {
     };
 };
 
+dataPool.EditMaterial = async (material_id, updates) => {
+    const keys = Object.keys(updates);
+
+    if (keys.length === 0) {
+        return;
+    }
+
+    const columns = keys
+        .map((key, index) => `${key} = $${index + 1}`)
+        .join(", ");
+
+    const values = Object.values(updates);
+
+    const query = `
+        UPDATE material
+        SET ${columns}
+        WHERE material_id = $${keys.length + 1}
+        RETURNING *
+    `;
+
+    const result = await conn.query(query, [...values, material_id]);
+
+    if (result.rows.length === 0) {
+        throw new Error("Material not found");
+    }
+
+    return result.rows[0];
+};
+
 module.exports = dataPool;
