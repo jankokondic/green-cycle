@@ -6,6 +6,37 @@ const bcrypt = require('bcrypt')
 
 let upload_dest = multer({ dest: 'uploads/' })
 
+users.post('/register', upload_dest.single('file'), async (req, res) => {
+    try {
+        const { username, password, email } = req.body;
+        const file = req.file;
+
+        console.log(username, password, email, file)
+
+        if (!username || !password || !email || !file) {
+            return res.status(400).json({ error: 'All fields are required, including the file' });
+        }
+
+        const existingUsers = await DB.GetUserByUserName(username);
+        if (existingUsers.length > 0) {
+            return res.status(409).json({ error: 'Username already exists' });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await DB.CreateUser(username, hashedPassword, email, file.path);
+
+        return res.status(201).json({
+            message: 'Registration successful',
+            user: { username, email }
+        });
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        return res.status(500).json({ error: 'An error occurred on the server' });
+    }
+});
+
 users.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -60,3 +91,6 @@ users.get('/session', async (req, res, next) => {
         next()
     }
 })
+
+
+module.exports = users
