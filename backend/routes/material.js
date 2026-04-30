@@ -82,5 +82,17 @@ material.put('/:material_id', upload_dest.single('file'), async (req, res) => {
     }
 });
 
+material.delete('/:material_id', async (req, res) => {
+    const { material_id } = req.params;
+
+    try {
+        await DB.DeleteMaterial(material_id);
+        res.status(200).json({ message: 'Material successfully deleted.' });
+    } catch (err) {
+        console.error("Error deleting material:", err);
+        res.status(500).json({ error: 'Server error while deleting material.' });
+    }
+});
+
 
 module.exports = material
