@@ -47,3 +47,16 @@ users.post('/login', async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error" });
     }
 });
+
+users.get('/session', async (req, res, next) => {
+    try {
+        console.log("session data: ")
+        console.log(req.session)
+        res.json(req.session);
+    }
+    catch (err) {
+        console.log(err)
+        res.sendStatus(500)
+        next()
+    }
+})
