@@ -381,4 +381,22 @@ dataPool.AddMaterial = async (material) => {
     return result.rows[0];
 };
 
+dataPool.DeleteMaterial = async (material_id) => {
+    const result = await conn.query(
+        `DELETE FROM material 
+         WHERE material_id = $1 
+         RETURNING material_id`,
+        [material_id]
+    );
+
+    if (result.rows.length === 0) {
+        throw new Error("Material not found");
+    }
+
+    return {
+        success: true,
+        material_id: result.rows[0].material_id
+    };
+};
+
 module.exports = dataPool;
