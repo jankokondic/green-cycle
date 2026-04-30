@@ -231,4 +231,49 @@ dataPool.UpdateProject = async (projectId, updates, materials, imagePaths) => {
     }
 };
 
+dataPool.GetProjectDetails = async (projectId) => {
+    const projectResult = await conn.query(
+        `SELECT *
+         FROM project
+         WHERE project_id = $1`,
+        [projectId]
+    );
+
+    if (projectResult.rows.length === 0) {
+        throw new Error("Project not found");
+    }
+
+    const project = projectResult.rows[0];
+
+    const materialsResult = await conn.query(
+        `SELECT 
+            mp.material_id,
+            mp.quantity,
+            m.name,
+            m.category,
+            m.unit,
+            m.description,
+            m.is_ecologically,
+            m.is_sensitive,
+            m.icon
+         FROM material_project mp
+         JOIN material m ON mp.material_id = m.material_id
+         WHERE mp.project_id = $1`,
+        [projectId]
+    );
+
+    const imagesResult = await conn.query(
+        `SELECT image_path
+         FROM project_images
+         WHERE project_id = $1`,
+        [projectId]
+    );
+
+    return {
+        project,
+        materials: materialsResult.rows,
+        images: imagesResult.rows.map(row => row.image_path),
+    };
+};
+
 module.exports = dataPool;
