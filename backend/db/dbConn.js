@@ -160,4 +160,75 @@ dataPool.CreateProject = async (project, materials, imagePaths) => {
     }
 };
 
+dataPool.UpdateProject = async (projectId, updates, materials, imagePaths) => {
+    const client = await conn.connect();
+
+    try {
+        await client.query("BEGIN");
+
+        if (updates && Object.keys(updates).length > 0) {
+            const keys = Object.keys(updates);
+            const values = Object.values(updates);
+
+            const columns = keys
+                .map((key, index) => `${key} = $${index + 1}`)
+                .join(", ");
+
+            const query = `
+                UPDATE project
+                SET ${columns}
+                WHERE project_id = $${keys.length + 1}
+            `;
+
+            await client.query(query, [...values, projectId]);
+        }
+
+        if (materials) {
+            await client.query(
+                `DELETE FROM material_project WHERE project_id = $1`,
+                [projectId]
+            );
+
+            for (const material of materials) {
+                await client.query(
+                    `INSERT INTO material_project 
+                        (project_id, material_id, quantity)
+                     VALUES 
+                        ($1, $2, $3)`,
+                    [projectId, material.id, material.quantity]
+                );
+            }
+        }
+
+        if (imagePaths) {
+            await client.query(
+                `DELETE FROM project_images WHERE project_id = $1`,
+                [projectId]
+            );
+
+            for (const imagePath of imagePaths) {
+                await client.query(
+                    `INSERT INTO project_images 
+                        (project_id, image_path)
+                     VALUES 
+                        ($1, $2)`,
+                    [projectId, imagePath]
+                );
+            }
+        }
+
+        await client.query("COMMIT");
+
+        return {
+            success: true,
+            message: "Project updated successfully",
+        };
+    } catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
 module.exports = dataPool;
