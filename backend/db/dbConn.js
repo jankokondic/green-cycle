@@ -19,3 +19,13 @@ conn.connect()
     });
 
 let dataPool = {};
+
+
+dataPool.GetUserByUserName = (username) => {
+    return new Promise((resolve, reject) => {
+        conn.query('SELECT * FROM user WHERE username = ?', [username], (err, res) => {
+            if (err) return reject(err);
+            return resolve(res);
+        });
+    });
+}
