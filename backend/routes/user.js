@@ -92,5 +92,24 @@ users.get('/session', async (req, res, next) => {
     }
 })
 
+users.get('/authentication', async (req, res, next) => {
+    try {
+        if (!req.session.user || !req.session.user.user_id) {
+            return res.status(401).json({ message: 'Not authenticated' });
+        }
+
+        const user = await DB.GetUserById(req.session.user.user_id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.json(user);
+    } catch (err) {
+        console.error('Session error:', err);
+        next(err);
+    }
+});
+
+
 
 module.exports = users
