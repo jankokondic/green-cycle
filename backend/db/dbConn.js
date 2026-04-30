@@ -95,4 +95,69 @@ dataPool.GetUserById = async (userId) => {
     return user;
 };
 
+dataPool.CreateProject = async (project, materials, imagePaths) => {
+    const client = await conn.connect();
+
+    try {
+        await client.query("BEGIN");
+
+        const queryProject = `
+            INSERT INTO project 
+                (title, description, category, difficulty, time_required, is_published, instruction, thumbnail, create_at, user_id)
+            VALUES 
+                ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING project_id
+        `;
+
+        const values = [
+            project.title,
+            project.description,
+            project.category,
+            project.difficulty,
+            project.time_required,
+            project.is_published,
+            project.instruction,
+            project.thumbnail,
+            new Date(),
+            project.user
+        ];
+
+        const projectResult = await client.query(queryProject, values);
+        const projectId = projectResult.rows[0].project_id;
+
+        if (materials && materials.length > 0) {
+            for (const item of materials) {
+                await client.query(
+                    `INSERT INTO material_project 
+                        (project_id, material_id, quantity)
+                     VALUES 
+                        ($1, $2, $3)`,
+                    [projectId, item.id, item.quantity]
+                );
+            }
+        }
+
+        if (imagePaths && imagePaths.length > 0) {
+            for (const imagePath of imagePaths) {
+                await client.query(
+                    `INSERT INTO project_images 
+                        (project_id, image_path)
+                     VALUES 
+                        ($1, $2)`,
+                    [projectId, imagePath]
+                );
+            }
+        }
+
+        await client.query("COMMIT");
+
+        return projectId;
+    } catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
+    } finally {
+        client.release();
+    }
+};
+
 module.exports = dataPool;
