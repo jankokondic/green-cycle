@@ -111,5 +111,19 @@ users.get('/authentication', async (req, res, next) => {
 });
 
 
+users.get('/logout', async (req, res, next) => {
+    try {
+        req.session.destroy(function (err) {
+            res.json({ status: { success: true, msg: err } })
+        })
+
+    }
+    catch (err) {
+        console.log(err)
+        res.json({ status: { success: false, msg: err } })
+        res.sendStatus(500)
+        next()
+    }
+})
 
 module.exports = users
