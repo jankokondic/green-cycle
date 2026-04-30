@@ -29,3 +29,35 @@ dataPool.GetUserByUserName = (username) => {
         });
     });
 }
+
+
+dataPool.GetUserById = (userId) => {
+    return new Promise((resolve, reject) => {
+        const userQuery = `
+            SELECT user_id, username, email, profile_picture, points
+            FROM user
+            WHERE user_id = ?
+        `;
+
+        const rolesQuery = `
+            SELECT r.role_id, r.name, r.description
+            FROM role_user ru
+            JOIN role r ON ru.role_id = r.role_id
+            WHERE ru.user_id = ?
+        `;
+
+        conn.query(userQuery, [userId], (err, userResults) => {
+            if (err) return reject(err);
+            if (userResults.length === 0) return resolve(null); // user not found
+
+            const user = userResults[0];
+
+            conn.query(rolesQuery, [userId], (err, roleResults) => {
+                if (err) return reject(err);
+
+                user.roles = roleResults;
+                resolve(user);
+            });
+        });
+    });
+};
