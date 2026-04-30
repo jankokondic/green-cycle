@@ -9,7 +9,7 @@ CREATE TABLE project (
     title VARCHAR(255),
     instruction TEXT,
     thumbnail VARCHAR(255),
-    user_id INT REFERENCES app_user(user_id) ON DELETE CASCADE
+    user_id INT REFERENCES "user"(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE project_images (

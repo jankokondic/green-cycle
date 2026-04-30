@@ -1,4 +1,4 @@
-CREATE TABLE app_user (
+CREATE TABLE "user" (
     user_id SERIAL PRIMARY KEY,
     password_hash VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -16,6 +16,6 @@ CREATE TABLE role (
 CREATE TABLE role_user (
     role_user_id SERIAL PRIMARY KEY,
     role_id INT REFERENCES role(role_id) ON DELETE CASCADE,
-    user_id INT REFERENCES app_user(user_id) ON DELETE CASCADE,
+    user_id INT REFERENCES "user"(user_id) ON DELETE CASCADE,
     UNIQUE(role_id, user_id)
 );

@@ -9,6 +9,6 @@ CREATE TABLE achievement (
 CREATE TABLE achievement_user (
     achievement_user_id SERIAL PRIMARY KEY,
     achievement_id INT REFERENCES achievement(achievement_id) ON DELETE CASCADE,
-    user_id INT REFERENCES app_user(user_id) ON DELETE CASCADE,
+    user_id INT REFERENCES "user"(user_id) ON DELETE CASCADE,
     UNIQUE(achievement_id, user_id)
 );
