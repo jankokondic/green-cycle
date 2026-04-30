@@ -7,6 +7,7 @@ const port = process.env.PORT || 8080
 
 // import local files
 const user = require('./routes/user')
+const project = require('./routes/project')
 
 const session = require('express-session')
 
@@ -36,6 +37,7 @@ app.use(session({
 
 
 app.use('/api/v1/user', user)
+app.use('/api/v1/project', project)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
