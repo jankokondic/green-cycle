@@ -109,6 +109,21 @@ project.put('/:project_id', upload_dest.fields([
     }
 });
 
+project.get('/:projectId', async (req, res) => {
+    const { projectId } = req.params;
+
+    try {
+        const data = await DB.GetProjectDetails(projectId);
+        res.status(200).json(data);
+    } catch (err) {
+        if (err.message === 'Project not found') {
+            res.status(404).json({ error: 'Project not found' });
+        } else {
+            res.status(500).json({ error: 'Server error fetching project details' });
+        }
+    }
+});
+
 
 
 
