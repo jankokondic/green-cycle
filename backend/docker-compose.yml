@@ -1,4 +1,36 @@
 services:
+  mit-postgres:
+    image: postgres:16
+    container_name: mit-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: green_user
+      POSTGRES_PASSWORD: green_password
+      POSTGRES_DB: green_cycle
+    volumes:
+      - mit_postgres_data:/var/lib/postgresql/data
+    networks:
+      - barbershop_default
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U green_user -d green_cycle"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mit-migrate:
+    build:
+      context: ./db
+      dockerfile: Dockerfile.migrate
+    container_name: mit-migrate
+    depends_on:
+      mit-postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://green_user:green_password@mit-postgres:5432/green_cycle?sslmode=disable
+    networks:
+      - barbershop_default
+    restart: "no"
+
   mit-backend:
     build:
       context: .
@@ -8,6 +40,8 @@ services:
     depends_on:
       mit-postgres:
         condition: service_healthy
+      mit-migrate:
+        condition: service_completed_successfully
     networks:
       - barbershop_default
     volumes:
@@ -21,25 +55,6 @@ services:
       DB_PASS: green_password
       DB_DATABASE: green_cycle
       PORT: 55555
-
-  mit-postgres:
-    image: postgres:16
-    container_name: mit-postgres
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: green_user
-      POSTGRES_PASSWORD: green_password
-      POSTGRES_DB: green_cycle
-    volumes:
-      - mit_postgres_data:/var/lib/postgresql/data
-      - ./db:/docker-entrypoint-initdb.d
-    networks:
-      - barbershop_default
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U green_user -d green_cycle"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
 
 volumes:
   mit_postgres_data:
