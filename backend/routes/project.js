@@ -76,7 +76,7 @@ project.put('/:project_id', upload_dest.fields([
     if (body.description) updates.description = body.description;
     if (body.category) updates.category = body.category;
     if (body.difficulty) updates.difficulty = body.difficulty;
-    if (body.time_required) updates.time_requied = body.time_required;
+    if (body.time_required) updates.time_required = body.time_required;
     if (body.instruction) updates.instruction = body.instruction;
     if (body.is_published !== undefined) {
         updates.is_published = body.is_published === 'true' ? 1 : 0;
