@@ -5,8 +5,6 @@ services:
       dockerfile: Dockerfile
     container_name: mit-backend
     restart: unless-stopped
-    env_file:
-      - ./.env
     depends_on:
       mit-postgres:
         condition: service_healthy
@@ -16,6 +14,13 @@ services:
       - ./uploads:/app/uploads
     expose:
       - "55555"
+    environment:
+      DB_HOST: mit-postgres
+      DB_PORT: 5432
+      DB_USER: green_user
+      DB_PASS: green_password
+      DB_DATABASE: green_cycle
+      PORT: 55555
 
   mit-postgres:
     image: postgres:16
