@@ -1,0 +1,115 @@
+.materials-container {
+  padding: 2rem;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.materials-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.materials-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  background-color: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+}
+
+.materials-form input[type="text"],
+.materials-form input[type="file"],
+.materials-form textarea {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.materials-form label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+}
+
+.materials-form button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.materials-form button:hover {
+  background-color: #45a049;
+}
+
+.materials-list {
+  list-style: none;
+  padding: 0;
+}
+
+.materials-list li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.materials-list img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: contain;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.materials-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.materials-actions button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.materials-actions button:first-child {
+  background-color: #2196f3;
+  color: white;
+}
+
+.materials-actions button:last-child {
+  background-color: #f44336;
+  color: white;
+}
+
+.materials-actions button:hover {
+  opacity: 0.9;
+}
+
+.materials-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.materials-edit-form input[type="text"],
+.materials-edit-form input[type="file"] {
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

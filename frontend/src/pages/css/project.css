@@ -1,0 +1,137 @@
+.project-page {
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.project-banner {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.banner-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-title {
+  font-size: 2rem;
+  margin-top: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.project-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0px 0 20px 0;
+}
+
+.project-tag {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.project-description-section,
+.project-instruction-section {
+  width: calc(100% - 40px);
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  line-height: 1.6;
+}
+
+.project-description-section h3,
+.project-instruction-section h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 6px;
+}
+
+.project-materials {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.project-materials ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.material-item {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  align-items: flex-start;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.material-item img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.material-details p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.project-gallery {
+  margin-top: 20px;
+}
+
+.gallery-slider {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
+.gallery-slider::-webkit-scrollbar {
+  height: 8px;
+}
+
+.gallery-slider::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+.gallery-slider img {
+  width: 150px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.gallery-slider img:hover {
+  transform: scale(1.05);
+}
