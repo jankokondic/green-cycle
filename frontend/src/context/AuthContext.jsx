@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { getSessionUser } from '../api/api';
+import { getSessionUser, logoutUser } from '../api/api'; // dodali logoutUser
 
 const AuthContext = createContext();
 
@@ -8,7 +8,15 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const login = (userData) => setUser(userData);
-    const logout = () => setUser(null);
+
+    const logout = async () => {
+        try {
+            await logoutUser();
+            setUser(null);
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
+    };
 
     useEffect(() => {
         const checkSession = async () => {
