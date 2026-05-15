@@ -1,0 +1,138 @@
+.comment-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.comment-form button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background-color: #0a7cff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.comment-form button:hover {
+  background-color: #005ec2;
+}
+
+.comment-card {
+  width: 100%;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid rgb(226, 226, 226);
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.comment-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  border: 2px solid #ccc;
+}
+
+.comment-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-username {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.comment-date {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+.comment-body {
+  margin-top: 4px;
+}
+
+.comment-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.comment-edit-area {
+  width: 100%;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #bbb;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.comment-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  background-color: #0a7cff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.comment-btn:hover {
+  background-color: #005ec2;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.comment-action-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 0.9rem;
+  color: #0a7cff;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 4px 6px;
+}
+
+.comment-action-btn.delete {
+  color: #d33;
+}
+
+.comment-action-btn:hover {
+  opacity: 0.8;
+}
