@@ -161,7 +161,7 @@ const NavigationBar = () => {
                                 cursor: 'pointer'
                             }} onClick={() => navigate('/new')}>new</button>
                             <img
-                                src={`http://88.200.63.148:12345/${user.profile_picture}`}
+                                src={`https://mit.nivoru.com/${user.profile_picture}`}
                                 alt="Avatar"
                                 style={{
                                     width: '36px',
