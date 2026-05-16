@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://88.200.63.148:12345/api/v1';
+const API_BASE = 'https://mit.nivoru.com/api/v1';
 
 export const getSessionUser = async () => {
   const response = await axios.get(`${API_BASE}/user/authentication`, { withCredentials: true });
