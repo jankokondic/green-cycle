@@ -18,7 +18,7 @@ app.set('trust proxy', 1) // trust first proxy
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'http://88.200.63.148:8081',
+    origin: 'https://mit.nivoru.com',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
