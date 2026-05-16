@@ -21,7 +21,11 @@ app.set('trust proxy', 1) // trust first proxy
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'https://mit.nivoru.com',
+    origin: [
+        'https://mit.nivoru.com',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true
 }));
