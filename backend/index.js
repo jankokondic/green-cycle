@@ -7,8 +7,11 @@ const port = process.env.PORT || 8080
 
 // import local files
 const user = require('./routes/user')
+const role = require('./routes/role')
 const material = require('./routes/material')
 const project = require('./routes/project')
+const report = require('./routes/report')
+const comment = require('./routes/comment')
 
 const session = require('express-session')
 
@@ -38,8 +41,12 @@ app.use(session({
 
 
 app.use('/api/v1/user', user)
+app.use('/api/v1/role', role)
 app.use('/api/v1/material', material)
 app.use('/api/v1/project', project)
+app.use('/api/v1/report', report)
+app.use('/api/v1/comment', comment)
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(express.static(path.join(__dirname, 'build')));

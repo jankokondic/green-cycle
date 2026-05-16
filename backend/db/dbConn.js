@@ -481,4 +481,181 @@ dataPool.GetAllMaterials = async () => {
     return result.rows;
 };
 
+dataPool.GetUsersWithPermissions = async () => {
+    const result = await conn.query(`
+        SELECT 
+            u.user_id,
+            u.username,
+            r.name AS role_name,
+            r.description AS role_description
+        FROM "user" u
+        JOIN role_user ru ON u.user_id = ru.user_id
+        JOIN role r ON ru.role_id = r.role_id
+        ORDER BY u.user_id;
+    `);
+
+    const usersMap = new Map();
+
+    result.rows.forEach(row => {
+        if (!usersMap.has(row.user_id)) {
+            usersMap.set(row.user_id, {
+                user_id: row.user_id,
+                username: row.username,
+                roles: []
+            });
+        }
+
+        usersMap.get(row.user_id).roles.push({
+            name: row.role_name,
+            description: row.role_description
+        });
+    });
+
+    return Array.from(usersMap.values());
+};
+
+dataPool.AssignRoleToUser = async (user_id, role_id) => {
+    const checkResult = await conn.query(
+        `SELECT *
+         FROM role_user
+         WHERE user_id = $1 AND role_id = $2`,
+        [user_id, role_id]
+    );
+
+    if (checkResult.rows.length > 0) {
+        throw {
+            status: 409,
+            message: 'This user already has that role.'
+        };
+    }
+
+    const insertResult = await conn.query(
+        `INSERT INTO role_user (role_id, user_id)
+         VALUES ($1, $2)
+         RETURNING *`,
+        [role_id, user_id]
+    );
+
+    return insertResult.rows[0];
+};
+
+dataPool.RemoveUserRole = async (user_id, role_id) => {
+    const result = await conn.query(
+        `DELETE FROM role_user
+         WHERE user_id = $1 AND role_id = $2`,
+        [user_id, role_id]
+    );
+
+    if (result.rowCount === 0) {
+        throw {
+            status: 404,
+            message: 'Role not found for this user.'
+        };
+    }
+
+    return {
+        message: 'Role removed successfully.'
+    };
+};
+
+dataPool.AddReport = async ({ type, reason, user_id, project_id }) => {
+    const result = await conn.query(
+        `INSERT INTO report
+         (type, reason, date_reported, user_id, project_id, status)
+         VALUES ($1, $2, NOW(), $3, $4, 'pending')
+         RETURNING report_id`,
+        [type, reason, user_id, project_id]
+    );
+
+    return result.rows[0].report_id;
+};
+
+dataPool.UpdateReportStatus = async (report_id, status) => {
+    const result = await conn.query(
+        `UPDATE report
+         SET status = $1
+         WHERE report_id = $2`,
+        [status, report_id]
+    );
+
+    if (result.rowCount === 0) {
+        throw new Error('Report not found');
+    }
+};
+
+dataPool.GetPendingReports = async () => {
+    const result = await conn.query(
+        `SELECT *
+         FROM report
+         WHERE status = 'pending'`
+    );
+
+    return result.rows;
+};
+
+dataPool.AddComment = async ({ content, user_id, project_id = null }) => {
+    const result = await conn.query(
+        `INSERT INTO comment
+         (content, created_at, user_id, project_id)
+         VALUES ($1, NOW(), $2, $3)
+         RETURNING comment_id`,
+        [content, user_id, project_id]
+    );
+
+    return result.rows[0].comment_id;
+};
+
+dataPool.UpdateComment = async (comment_id, user_id, content) => {
+    const result = await conn.query(
+        `UPDATE comment
+         SET content = $1
+         WHERE comment_id = $2 AND user_id = $3`,
+        [content, comment_id, user_id]
+    );
+
+    if (result.rowCount === 0) {
+        throw new Error('Comment not found or user not authorized.');
+    }
+};
+
+dataPool.DeleteComment = async (comment_id, user_id, user_role) => {
+    let query = `
+        DELETE FROM comment
+        WHERE comment_id = $1
+    `;
+
+    const values = [comment_id];
+
+    if (user_role !== 'admin' && user_role !== 'moderator') {
+        query += ` AND user_id = $2`;
+        values.push(user_id);
+    }
+
+    const result = await conn.query(query, values);
+
+    if (result.rowCount === 0) {
+        throw new Error('Comment not found or unauthorized.');
+    }
+};
+
+dataPool.GetCommentsByProjectId = async (projectId) => {
+    const result = await conn.query(
+        `SELECT 
+            c.comment_id,
+            c.content,
+            c.created_at,
+            c.user_id,
+            c.project_id,
+            u.username,
+            u.profile_picture
+         FROM comment c
+         JOIN "user" u ON c.user_id = u.user_id
+         WHERE c.project_id = $1
+         ORDER BY c.created_at DESC`,
+        [projectId]
+    );
+
+    return result.rows;
+};
+
 module.exports = dataPool;
