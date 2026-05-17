@@ -17,7 +17,7 @@ const Comment = ({ comment, currentUser, isAdmin, onDelete, onUpdate }) => {
         <div className="comment-card">
             <div className="comment-header">
                 <img
-                    src={`http://88.200.63.148:12345/${comment.profile_picture}`}
+                    src={`https://mit.nivoru.com/${comment.profile_picture}`}
                     alt={`${comment.username}'s avatar`}
                     className="comment-avatar"
                 />

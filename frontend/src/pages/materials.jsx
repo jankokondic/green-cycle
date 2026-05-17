@@ -150,7 +150,7 @@ const Materials = () => {
                                 <div>
                                     <p><strong>{material.name}</strong> ({material.category})</p>
                                     <p>{material.description}</p>
-                                    <img src={`http://88.200.63.148:12345${material.icon}`} alt={material.name} />
+                                    <img src={`https://mit.nivoru.com${material.icon}`} alt={material.name} />
                                     <div className="materials-actions">
                                         <button onClick={() => handleEditToggle(material)}>Edit</button>
                                         <button onClick={() => handleDelete(material.material_id)}>Delete</button>

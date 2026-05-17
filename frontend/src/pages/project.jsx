@@ -84,7 +84,7 @@ const Project = () => {
         <div className="project-banner">
           <div className="banner-image-wrapper">
             <img
-              src={`http://88.200.63.148:12345${project.thumbnail}`}
+              src={`https://mit.nivoru.com${project.thumbnail}`}
               alt={project.title}
               className="banner-image"
             />
@@ -205,7 +205,7 @@ const Project = () => {
           <ul>
             {materials.map((mat) => (
               <li key={mat.material_id} className="material-item">
-                <img src={`http://88.200.63.148:12345${mat.icon}`} alt={mat.name} />
+                <img src={`https://mit.nivoru.com${mat.icon}`} alt={mat.name} />
                 <div className="material-details">
                   <p>
                     <strong>{mat.name}</strong> ({mat.quantity} {mat.unit})
@@ -223,7 +223,7 @@ const Project = () => {
           <h3>Project Images</h3>
           <div className="gallery-slider">
             {images.map((img, i) => (
-              <img key={i} src={`http://88.200.63.148:12345${img}`} alt={`Project img ${i + 1}`} />
+              <img key={i} src={`https://mit.nivoru.com${img}`} alt={`Project img ${i + 1}`} />
             ))}
           </div>
         </div>
